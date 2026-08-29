@@ -26,6 +26,29 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
+      - name: Download test dataset
+        run: |
+          python - <<'PY'
+          import urllib.request
+          import zipfile
+          import os
+
+          url = "https://archive.ics.uci.edu/static/public/222/bank+marketing.zip"
+          zip_path = "bank+marketing.zip"
+
+          urllib.request.urlretrieve(url, zip_path)
+
+          with zipfile.ZipFile(zip_path, "r") as outer:
+              outer.extractall("tmp_bank")
+
+          os.makedirs("data", exist_ok=True)
+
+          with zipfile.ZipFile("tmp_bank/bank.zip", "r") as inner:
+              inner.extract("bank-full.csv", "data")
+
+          os.remove(zip_path)
+          PY
+
       - name: Run tests
         run: |
           python -m pytest
