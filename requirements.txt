@@ -4,3 +4,8 @@ scikit-learn
 matplotlib
 seaborn
 jupyter
+mlflow
+dvc
+zenml[local]==0.96.3
+pytest
+pyyaml

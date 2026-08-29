@@ -8,9 +8,14 @@ from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_sc
 from sklearn.model_selection import train_test_split
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import OneHotEncoder, StandardScaler
-
+import yaml
 
 df = pd.read_csv("data/bank-full.csv", sep=";")
+
+with open("data/bank-full.csv.dvc", "r") as f:
+    dvc_metadata = yaml.safe_load(f)
+
+dvc_data_version = dvc_metadata["outs"][0]["md5"]
 
 X = df.drop("y", axis=1)
 y = df["y"].map({"no": 0, "yes": 1})
@@ -52,6 +57,10 @@ pipeline = Pipeline(
 mlflow.set_experiment("Bank Marketing Classification")
 
 with mlflow.start_run():
+
+    mlflow.set_tag("dvc_data_version", dvc_data_version)
+    mlflow.log_artifact("data/bank-full.csv.dvc")
+
 
     pipeline.fit(X_train, y_train)
 
