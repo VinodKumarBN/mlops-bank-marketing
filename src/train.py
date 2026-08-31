@@ -1,6 +1,8 @@
 import pandas as pd
 import mlflow
 import mlflow.sklearn
+import joblib
+import os
 
 from sklearn.compose import ColumnTransformer
 from sklearn.ensemble import RandomForestClassifier
@@ -90,6 +92,15 @@ with mlflow.start_run():
         pipeline,
         name="bank_marketing_model"
     )
+
+    os.makedirs("models", exist_ok=True)
+
+    joblib.dump(
+    pipeline,
+    "models/bank_marketing_model.pkl"
+)
+
+    print("Model saved to models/bank_marketing_model.pkl")
 
     print("Model Performance")
     print("Accuracy :", accuracy)

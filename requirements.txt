@@ -9,3 +9,5 @@ dvc
 zenml[local]==0.96.3
 pytest
 pyyaml
+fastapi
+uvicorn
